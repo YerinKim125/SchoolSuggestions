@@ -2,4 +2,8 @@
     <string name="app_name">SchoolSuggestions</string>
     <string name="login_text">로그인</string>
     <string name="registration_text">계정 생성하기</string>
+    <string name="email_hint_text">Email</string>
+    <string name="password_hint_text">비밀번호</string>
+    <string name="cancel_text">CANCEL</string>
+    <string name="submit_text">SUBMIT</string>
 </resources>
