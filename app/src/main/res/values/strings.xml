@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SchoolSuggestions</string>
+    <string name="login_text">로그인</string>
+    <string name="registration_text">계정 생성하기</string>
 </resources>
