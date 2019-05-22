@@ -13,12 +13,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView loginText = findViewById(R.id.loginText_main);
-        loginText.setOnClickListener(new View.OnClickListener() {
+        TextView loginTextView = findViewById(R.id.loginText_main);
+        loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
+            }
+        });
+
+        TextView registerTextView = findViewById(R.id.registrationText_main);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(registerIntent);
             }
         });
     }
