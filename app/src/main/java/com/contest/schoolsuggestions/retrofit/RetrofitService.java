@@ -11,6 +11,6 @@ import retrofit2.http.POST;
 public interface RetrofitService {
     @Headers({"Content-Type:application/json"})
 
-    @POST("/users/")
+    @POST("/users")
     Call<UserInfo> registerUser(@Body RegisterUserTO registerUserTO);
 }

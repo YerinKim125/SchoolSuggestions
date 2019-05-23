@@ -17,12 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
 
+    public interface SuccessRegisterListener {
+        void onSuccessRegister(UserInfo userInfo);
+    }
+
     private static String TAG = "Retrofit";
     //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
     final private String requestURL = "http://10.0.2.2:8080";
     private static RetrofitManager retrofitManager;
     private Retrofit retrofit;
     private RetrofitService service;
+    private SuccessRegisterListener mSuccessRegisterListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -36,13 +41,25 @@ public class RetrofitManager {
         return retrofitManager;
     }
 
+    public void setOnSuccessRegisterListener(SuccessRegisterListener mSuccessRegisterListener) {
+        this.mSuccessRegisterListener = mSuccessRegisterListener;
+    }
+
+    public void removeSuccessRegisterListener() {
+        this.mSuccessRegisterListener = null;
+    }
+
+    private void showToast(int message) {
+        Toast.makeText(GlobalApplication.getGlobalContext(), message, Toast.LENGTH_LONG).show();
+    }
+
     private void logBadResponse(int errorCode, String errorMessage, String methodName) {
         Log.e(TAG, methodName + " Error Code: " + errorCode);
         Log.e(TAG, methodName + ": " + errorMessage);
     }
 
     private void logConnectionFailure(String errorMessage, String methodName) {
-        Toast.makeText(GlobalApplication.getGlobalContext(), R.string.connection_failure_message, Toast.LENGTH_LONG).show();
+        showToast(R.string.connection_failure_message);
         Log.e(TAG, methodName + ": " + errorMessage);
     }
 
@@ -53,7 +70,10 @@ public class RetrofitManager {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 if (response.isSuccessful()) {
-                    //TODO
+                    showToast(R.string.success_register_message);
+                    if (mSuccessRegisterListener != null) {
+                        mSuccessRegisterListener.onSuccessRegister(response.body());
+                    }
                 } else {
                     logBadResponse(response.code(), response.errorBody().toString(), methodName);
                 }
