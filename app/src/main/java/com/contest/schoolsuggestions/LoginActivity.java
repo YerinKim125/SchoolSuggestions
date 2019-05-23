@@ -17,10 +17,10 @@ public class LoginActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
-                intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intentHome.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intentHome);
+                Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
+                intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentMain.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intentMain);
             }
         });
     }
