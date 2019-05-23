@@ -5,8 +5,13 @@ import android.widget.Toast;
 
 import com.contest.schoolsuggestions.GlobalApplication;
 import com.contest.schoolsuggestions.R;
+import com.contest.schoolsuggestions.model.RegisterUserTO;
+import com.contest.schoolsuggestions.model.UserInfo;
 import com.google.gson.GsonBuilder;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,5 +44,25 @@ public class RetrofitManager {
     private void logConnectionFailure(String errorMessage, String methodName) {
         Toast.makeText(GlobalApplication.getGlobalContext(), R.string.connection_failure_message, Toast.LENGTH_LONG).show();
         Log.e(TAG, methodName + ": " + errorMessage);
+    }
+
+    public void registerUser(RegisterUserTO registerUserTO) {
+        final String methodName = "registerUser";
+        Call<UserInfo> req = service.registerUser(registerUserTO);
+        req.enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                if (response.isSuccessful()) {
+                    //TODO
+                } else {
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
     }
 }
