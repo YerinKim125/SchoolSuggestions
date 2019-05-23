@@ -1,5 +1,6 @@
 package com.contest.schoolsuggestions.retrofit;
 
+import com.contest.schoolsuggestions.model.LoginTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 
@@ -13,4 +14,7 @@ public interface RetrofitService {
 
     @POST("/users")
     Call<UserInfo> registerUser(@Body RegisterUserTO registerUserTO);
+
+    @POST("/users/login")
+    Call<UserInfo> login(@Body LoginTO loginTO);
 }

@@ -17,4 +17,6 @@
     <string name="connection_failure_message">네트워크 연결이 불안정 합니다. 다시 시도해주세요.</string>
     <string name="success_register_message">회원가입에 성공하였습니다.</string>
     <string name="code_incorrect_message">코드 인증에 실패하였습니다.</string>
+    <string name="success_login_message">로그인에 성공하였습니다.</string>
+    <string name="fail_login_message">로그인에 실패하였습니다. 아이디 혹은 비밀번호를 확인해주세요.</string>
 </resources>

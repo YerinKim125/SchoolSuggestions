@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.contest.schoolsuggestions.GlobalApplication;
 import com.contest.schoolsuggestions.R;
+import com.contest.schoolsuggestions.model.LoginTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,10 @@ public class RetrofitManager {
         void onSuccessRegister(UserInfo userInfo);
     }
 
+    public interface SuccessLoginListener {
+        void onSuccessLogin(UserInfo userInfo);
+    }
+
     private static String TAG = "Retrofit";
     //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
     final private String requestURL = "http://10.0.2.2:8080";
@@ -28,6 +33,7 @@ public class RetrofitManager {
     private Retrofit retrofit;
     private RetrofitService service;
     private SuccessRegisterListener mSuccessRegisterListener;
+    private SuccessLoginListener mSuccessLoginListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -45,8 +51,16 @@ public class RetrofitManager {
         this.mSuccessRegisterListener = mSuccessRegisterListener;
     }
 
+    public void setOnSuccessLoginListener(SuccessLoginListener mSuccessLoginListener) {
+        this.mSuccessLoginListener = mSuccessLoginListener;
+    }
+
     public void removeSuccessRegisterListener() {
         this.mSuccessRegisterListener = null;
+    }
+
+    public void removeSuccessLoginListener() {
+        this.mSuccessLoginListener = null;
     }
 
     private void showToast(int message) {
@@ -75,6 +89,30 @@ public class RetrofitManager {
                         mSuccessRegisterListener.onSuccessRegister(response.body());
                     }
                 } else {
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void login(LoginTO loginTO) {
+        final String methodName = "login";
+        Call<UserInfo> req = service.login(loginTO);
+        req.enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                if (response.isSuccessful()) {
+                    showToast(R.string.success_login_message);
+                    if (mSuccessLoginListener != null) {
+                        mSuccessLoginListener.onSuccessLogin(response.body());
+                    }
+                } else {
+                    showToast(R.string.fail_login_message);
                     logBadResponse(response.code(), response.errorBody().toString(), methodName);
                 }
             }
