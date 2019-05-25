@@ -9,18 +9,25 @@ import android.widget.TextView;
 
 import com.contest.schoolsuggestions.model.IssueInfo;
 import com.contest.schoolsuggestions.model.PostInfo;
+import com.contest.schoolsuggestions.model.PostInfoTO;
+import com.contest.schoolsuggestions.model.UpdatePostTO;
 import com.contest.schoolsuggestions.model.UserInfo;
+import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
-public class PostViewActivity extends AppCompatActivity {
+public class PostViewActivity extends AppCompatActivity implements RetrofitManager.SuccessUpdatePostListener {
+
+    PostInfo postInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_view);
 
+        RetrofitManager.getInstance().setOnSuccessUpdatePostListener(this);
+
         UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
-        IssueInfo issueInfo = (IssueInfo) getIntent().getSerializableExtra("issueInfo");
-        PostInfo postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
+        final IssueInfo issueInfo = (IssueInfo) getIntent().getSerializableExtra("issueInfo");
+        postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
 
         TextView issueTextView = findViewById(R.id.issueText_postView);
         TextView titleTextView = findViewById(R.id.titleText_postView);
@@ -46,5 +53,55 @@ public class PostViewActivity extends AppCompatActivity {
             feedbackEditText.setVisibility(View.VISIBLE);
             submitBtn.setVisibility(View.VISIBLE);
         }
+
+        agreeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdatePostTO updatePostTO = new UpdatePostTO(postInfo.getAgree() + 1, postInfo.getDisagree(), postInfo.getFeedback());
+                RetrofitManager.getInstance().updatePost(issueInfo.getId(), postInfo.getId(), updatePostTO);
+            }
+        });
+
+        disagreeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdatePostTO updatePostTO = new UpdatePostTO(postInfo.getAgree(), postInfo.getDisagree() + 1, postInfo.getFeedback());
+                RetrofitManager.getInstance().updatePost(issueInfo.getId(), postInfo.getId(), updatePostTO);
+            }
+        });
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText feedbackEditText = findViewById(R.id.feedBackEditText_postView);
+                UpdatePostTO updatePostTO = new UpdatePostTO(postInfo.getAgree(), postInfo.getDisagree(), feedbackEditText.getText().toString());
+                RetrofitManager.getInstance().updatePost(issueInfo.getId(), postInfo.getId(), updatePostTO);
+            }
+        });
+    }
+
+    @Override
+    public void onSuccessUpdatePost(PostInfoTO postInfoTO) {
+        TextView agreeTextView = findViewById(R.id.agreeTextView_postView);
+        TextView disagreeTextView = findViewById(R.id.disagreeTextView_postView);
+        TextView feedbackTextView = findViewById(R.id.feedBackText_postView);
+        EditText feedbackEditText = findViewById(R.id.feedBackEditText_postView);
+
+        agreeTextView.setText(String.valueOf(postInfoTO.getAgree()));
+        disagreeTextView.setText(String.valueOf(postInfoTO.getDisagree()));
+        if (postInfoTO.getFeedback() != null && !postInfoTO.getFeedback().equals("")) {
+            feedbackTextView.setText(postInfoTO.getFeedback());
+            feedbackEditText.setText(postInfoTO.getFeedback());
+        }
+
+        postInfo.setAgree(postInfoTO.getAgree());
+        postInfo.setDisagree(postInfoTO.getDisagree());
+        postInfo.setFeedback(postInfo.getFeedback());
+    }
+
+    @Override
+    protected void onDestroy() {
+        RetrofitManager.getInstance().removeSuccessUpdatePostListener();
+        super.onDestroy();
     }
 }
