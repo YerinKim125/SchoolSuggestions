@@ -6,6 +6,7 @@ import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.contest.schoolsuggestions.model.WriteIssueTO;
+import com.contest.schoolsuggestions.model.WritePostTO;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
 
 public interface RetrofitService {
     @Headers({"Content-Type:application/json"})
@@ -32,5 +33,8 @@ public interface RetrofitService {
     Call<IssueInfoTO> writeIssue(@Body WriteIssueTO writeIssueTO);
 
     @GET("/issues/{id}")
-    Call<List<PostInfoTO>> getPostList(@Query("id") Long issueId);
+    Call<List<PostInfoTO>> getPostList(@Path("id") Long issueId);
+
+    @POST("/issues/{id}")
+    Call<PostInfoTO> writePost(@Path("id") Long issueId, @Body WritePostTO writePostTO);
 }

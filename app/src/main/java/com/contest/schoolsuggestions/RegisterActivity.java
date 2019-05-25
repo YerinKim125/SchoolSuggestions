@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity implements RetrofitManag
 
     @Override
     public void onSuccessRegister(UserInfo userInfo) {
-        Intent intentPostList = new Intent(RegisterActivity.this, PostListListActivity.class);
+        Intent intentPostList = new Intent(RegisterActivity.this, PostListActivity.class);
         intentPostList.putExtra("userInfo", userInfo);
         startActivity(intentPostList);
     }

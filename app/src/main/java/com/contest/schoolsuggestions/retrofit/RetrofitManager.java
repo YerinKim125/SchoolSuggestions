@@ -11,6 +11,7 @@ import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.contest.schoolsuggestions.model.WriteIssueTO;
+import com.contest.schoolsuggestions.model.WritePostTO;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
@@ -36,7 +37,11 @@ public class RetrofitManager {
     }
 
     public interface SuccessGetPostListListener {
-        void onSuccessGetPost(List<PostInfoTO> postInfoTOList);
+        void onSuccessGetPostList(List<PostInfoTO> postInfoTOList);
+    }
+
+    public interface SuccessWritePostListener {
+        void onSuccessWritePost(PostInfoTO postInfoTO);
     }
 
     private static String TAG = "Retrofit";
@@ -49,6 +54,7 @@ public class RetrofitManager {
     private SuccessLoginListener mSuccessLoginListener;
     private SuccessGetIssueListener mSuccessGetIssueListener;
     private SuccessGetPostListListener mSuccessGetPostListListener;
+    private SuccessWritePostListener mSuccessWritePostListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -78,6 +84,10 @@ public class RetrofitManager {
         this.mSuccessGetPostListListener = mSuccessGetPostListListener;
     }
 
+    public void setOnSuccessWritePostListener(SuccessWritePostListener mSuccessWritePostListener) {
+        this.mSuccessWritePostListener = mSuccessWritePostListener;
+    }
+
     public void removeSuccessRegisterListener() {
         this.mSuccessRegisterListener = null;
     }
@@ -90,8 +100,12 @@ public class RetrofitManager {
         this.mSuccessGetIssueListener = null;
     }
 
-    public void removemSuccessGetPostListener() {
+    public void removeSuccessGetPostListener() {
         this.mSuccessGetPostListListener = null;
+    }
+
+    public void removeSuccessWritePostListener() {
+        this.mSuccessWritePostListener = null;
     }
 
     private void showToast(int message) {
@@ -210,7 +224,7 @@ public class RetrofitManager {
             public void onResponse(Call<List<PostInfoTO>> call, Response<List<PostInfoTO>> response) {
                 if (response.isSuccessful()) {
                     if (mSuccessGetPostListListener != null) {
-                        mSuccessGetPostListListener.onSuccessGetPost(response.body());
+                        mSuccessGetPostListListener.onSuccessGetPostList(response.body());
                     }
                 } else {
                     showToast(R.string.fail_getPostList_message);
@@ -220,6 +234,30 @@ public class RetrofitManager {
 
             @Override
             public void onFailure(Call<List<PostInfoTO>> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void writePost(Long issueId, WritePostTO writePostTO) {
+        final String methodName = "writePost";
+        Call<PostInfoTO> req = service.writePost(issueId, writePostTO);
+        req.enqueue(new Callback<PostInfoTO>() {
+            @Override
+            public void onResponse(Call<PostInfoTO> call, Response<PostInfoTO> response) {
+                showToast(R.string.success_writePost_message);
+                if (response.isSuccessful()) {
+                    if (mSuccessWritePostListener != null) {
+                        mSuccessWritePostListener.onSuccessWritePost(response.body());
+                    }
+                } else {
+                    showToast(R.string.fail_writePost_message);
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostInfoTO> call, Throwable t) {
                 logConnectionFailure(t.getMessage(), methodName);
             }
         });

@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.contest.schoolsuggestions.model.IssueInfo;
 import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.PostListViewAdapter;
@@ -20,10 +21,11 @@ import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
 import java.util.List;
 
-public class PostListListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener, RetrofitManager.SuccessGetPostListListener {
+public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener, RetrofitManager.SuccessGetPostListListener, RetrofitManager.SuccessWritePostListener {
 
+    private List<PostInfoTO> postInfoList;
     private int btnStatus = 0;
-    private Long issueId = 0L;
+    private IssueInfo issueInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class PostListListActivity extends AppCompatActivity implements RetrofitM
 
         RetrofitManager.getInstance().setOnSuccessGetIssueListener(this);
         RetrofitManager.getInstance().setOnSuccessGetPostListener(this);
+        RetrofitManager.getInstance().setOnSuccessWritePostListener(this);
 
         final UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
         final Button registerBtn = findViewById(R.id.registerBtn_postList);
@@ -67,9 +70,9 @@ public class PostListListActivity extends AppCompatActivity implements RetrofitM
                         RetrofitManager.getInstance().writeIssue(new WriteIssueTO(issueEditText.getText().toString()));
                         break;
                     default:
-                        if (issueId > 0L) {
-                            Intent intentPostRegister = new Intent(PostListListActivity.this, PostRegisterActivity.class);
-                            //TODO issue number
+                        if (issueInfo.getId() > 0L) {
+                            Intent intentPostRegister = new Intent(PostListActivity.this, PostRegisterActivity.class);
+                            intentPostRegister.putExtra("issueInfo", issueInfo);
                             intentPostRegister.putExtra("userInfo", userInfo);
                             startActivity(intentPostRegister);
                         } else {
@@ -83,7 +86,8 @@ public class PostListListActivity extends AppCompatActivity implements RetrofitM
     @Override
     protected void onDestroy() {
         RetrofitManager.getInstance().removeSuccessGetIssueListener();
-        RetrofitManager.getInstance().removemSuccessGetPostListener();
+        RetrofitManager.getInstance().removeSuccessGetPostListener();
+        RetrofitManager.getInstance().removeSuccessWritePostListener();
         super.onDestroy();
     }
 
@@ -91,13 +95,25 @@ public class PostListListActivity extends AppCompatActivity implements RetrofitM
     public void onSuccessGetIssue(IssueInfoTO issueInfoTO) {
         if (issueInfoTO != null && !issueInfoTO.getTitle().equals("")) {
             ((TextView) findViewById(R.id.issueText_postList)).setText(issueInfoTO.getTitle());
-            issueId = issueInfoTO.getId();
+            issueInfo = new IssueInfo(issueInfoTO.getId(), issueInfoTO.getTitle());
+            RetrofitManager.getInstance().getPostList(issueInfo.getId());
         }
     }
 
     @Override
-    public void onSuccessGetPost(List<PostInfoTO> postInfoTOList) {
+    public void onSuccessGetPostList(List<PostInfoTO> postInfoTOList) {
         ListView postListView = findViewById(R.id.listView_post);
+        this.postInfoList = postInfoTOList;
         postListView.setAdapter(new PostListViewAdapter(postInfoTOList));
+    }
+
+    @Override
+    public void onSuccessWritePost(PostInfoTO postInfoTO) {
+        postInfoTO.setAgree(0);
+        postInfoTO.setDisagree(0);
+        this.postInfoList.add(0, postInfoTO);
+        ListView postListView = findViewById(R.id.listView_post);
+        PostListViewAdapter adapter = (PostListViewAdapter) postListView.getAdapter();
+        adapter.notifyDataSetChanged();
     }
 }

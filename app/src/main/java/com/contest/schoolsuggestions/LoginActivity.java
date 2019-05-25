@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements RetrofitManager.
 
     @Override
     public void onSuccessLogin(UserInfo userInfo) {
-        Intent intentPostList = new Intent(LoginActivity.this, PostListListActivity.class);
+        Intent intentPostList = new Intent(LoginActivity.this, PostListActivity.class);
         intentPostList.putExtra("userInfo", userInfo);
         startActivity(intentPostList);
     }
