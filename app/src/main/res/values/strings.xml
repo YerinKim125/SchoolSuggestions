@@ -27,4 +27,5 @@
     <string name="pageText_postRegister">학생회의 의견보내기</string>
     <string name="content_hint_postRegister">내용을 입력해 주세요</string>
     <string name="submitBtnText_postRegister">보내기</string>
+    <string name="issueTitleText_postList">안건 제목 입력란</string>
 </resources>

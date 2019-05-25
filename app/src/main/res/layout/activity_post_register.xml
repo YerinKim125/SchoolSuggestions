@@ -21,11 +21,19 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/issueText_postRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:text="@string/issueTitleText_postList"
+        android:textSize="20sp" />
+
     <EditText
         android:id="@+id/titleEditText_postRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:hint="@string/title_column_name"
         android:inputType="text"
         android:padding="10dp"
@@ -35,7 +43,7 @@
         android:id="@+id/contentEditText_postRegister"
         android:layout_width="match_parent"
         android:layout_height="370dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rounded_border"
         android:gravity="top"
         android:hint="@string/content_hint_postRegister"
