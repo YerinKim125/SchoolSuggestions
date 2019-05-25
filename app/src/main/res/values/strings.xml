@@ -35,4 +35,6 @@
     <string name="success_writePost_message">의견 등록에 성공했습니다.</string>
     <string name="fail_writePost_message">의견 등록에 실패했습니다. 다시 시도해 주세요.</string>
     <string name="feedback_hint_postView">피드백이 아직 없습니다.</string>
+    <string name="agree_text_postView">찬성</string>
+    <string name="disagree_text_postView">반대</string>
 </resources>

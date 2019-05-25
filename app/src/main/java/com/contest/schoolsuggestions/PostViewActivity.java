@@ -40,8 +40,8 @@ public class PostViewActivity extends AppCompatActivity implements RetrofitManag
         issueTextView.setText(issueInfo.getTitle());
         titleTextView.setText(postInfo.getContent());
         contentTextView.setText(postInfo.getContent());
-        agreeTextView.setText(String.valueOf(postInfo.getAgree()));
-        disagreeTextView.setText(String.valueOf(postInfo.getDisagree()));
+        agreeTextView.setText(getString(R.string.agree_text_postView) + " : " + String.valueOf(postInfo.getAgree()));
+        disagreeTextView.setText(getString(R.string.disagree_text_postView) + " : " + String.valueOf(postInfo.getDisagree()));
         if (postInfo.getFeedback() != null && !postInfo.getFeedback().equals("")) {
             feedbackTextView.setText(postInfo.getFeedback());
             feedbackEditText.setText(postInfo.getFeedback());
@@ -87,8 +87,8 @@ public class PostViewActivity extends AppCompatActivity implements RetrofitManag
         TextView feedbackTextView = findViewById(R.id.feedBackText_postView);
         EditText feedbackEditText = findViewById(R.id.feedBackEditText_postView);
 
-        agreeTextView.setText(String.valueOf(postInfoTO.getAgree()));
-        disagreeTextView.setText(String.valueOf(postInfoTO.getDisagree()));
+        agreeTextView.setText(getString(R.string.agree_text_postView) + " : " + String.valueOf(postInfoTO.getAgree()));
+        disagreeTextView.setText(getString(R.string.disagree_text_postView) + " : " + String.valueOf(postInfoTO.getDisagree()));
         if (postInfoTO.getFeedback() != null && !postInfoTO.getFeedback().equals("")) {
             feedbackTextView.setText(postInfoTO.getFeedback());
             feedbackEditText.setText(postInfoTO.getFeedback());
