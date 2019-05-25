@@ -29,4 +29,6 @@
     <string name="submitBtnText_postRegister">보내기</string>
     <string name="issueTitleText_postList">안건을 작성해 주세요</string>
     <string name="fail_getIssue_message">안건 가져오기에 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="success_writeIssue_message">안건 등록에 성공했습니다.</string>
+    <string name="fail_writeIssue_message">안건 등록에 실패했습니다. 다시 시도해 주세요.</string>
 </resources>

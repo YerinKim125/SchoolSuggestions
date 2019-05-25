@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.UserInfo;
+import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
 public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener {
@@ -57,7 +58,7 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
                         layoutParams.addRule(RelativeLayout.BELOW, issueTextView.getId());
                         registerBtn.setLayoutParams(layoutParams);
                         btnStatus = 1;
-                        //TODO issue db
+                        RetrofitManager.getInstance().writeIssue(new WriteIssueTO(issueEditText.getText().toString()));
                         break;
                     default:
                         if (issueId > 0L) {

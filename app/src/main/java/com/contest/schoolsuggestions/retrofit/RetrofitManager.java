@@ -9,6 +9,7 @@ import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.LoginTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
+import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.google.gson.GsonBuilder;
 
 import retrofit2.Call;
@@ -150,6 +151,30 @@ public class RetrofitManager {
                     }
                 } else {
                     showToast(R.string.fail_getIssue_message);
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IssueInfoTO> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void writeIssue(WriteIssueTO writeIssueTO) {
+        final String methodName = "writeIssue";
+        Call<IssueInfoTO> req = service.writeIssue(writeIssueTO);
+        req.enqueue(new Callback<IssueInfoTO>() {
+            @Override
+            public void onResponse(Call<IssueInfoTO> call, Response<IssueInfoTO> response) {
+                if (response.isSuccessful()) {
+                    showToast(R.string.success_writeIssue_message);
+                    if (mSuccessGetIssueListener != null) {
+                        mSuccessGetIssueListener.onSuccessGetIssue(response.body());
+                    }
+                } else {
+                    showToast(R.string.fail_writeIssue_message);
                     logBadResponse(response.code(), response.errorBody().toString(), methodName);
                 }
             }
