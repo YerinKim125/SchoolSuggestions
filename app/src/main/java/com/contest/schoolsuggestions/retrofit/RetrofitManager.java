@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.contest.schoolsuggestions.GlobalApplication;
 import com.contest.schoolsuggestions.R;
+import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.LoginTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
@@ -26,6 +27,10 @@ public class RetrofitManager {
         void onSuccessLogin(UserInfo userInfo);
     }
 
+    public interface SuccessGetIssueListener {
+        void onSuccessGetIssue(IssueInfoTO issueInfoTO);
+    }
+
     private static String TAG = "Retrofit";
     //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
     final private String requestURL = "http://10.0.2.2:8080";
@@ -34,6 +39,7 @@ public class RetrofitManager {
     private RetrofitService service;
     private SuccessRegisterListener mSuccessRegisterListener;
     private SuccessLoginListener mSuccessLoginListener;
+    private SuccessGetIssueListener mSuccessGetIssueListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -55,12 +61,20 @@ public class RetrofitManager {
         this.mSuccessLoginListener = mSuccessLoginListener;
     }
 
+    public void setOnSuccessGetIssueListener(SuccessGetIssueListener mSuccessGetIssueListener) {
+        this.mSuccessGetIssueListener = mSuccessGetIssueListener;
+    }
+
     public void removeSuccessRegisterListener() {
         this.mSuccessRegisterListener = null;
     }
 
     public void removeSuccessLoginListener() {
         this.mSuccessLoginListener = null;
+    }
+
+    public void removeSuccessGetIssueListener() {
+        this.mSuccessGetIssueListener = null;
     }
 
     private void showToast(int message) {
@@ -119,6 +133,29 @@ public class RetrofitManager {
 
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void getIssue() {
+        final String methodName = "getIssue";
+        Call<IssueInfoTO> req = service.getIssue();
+        req.enqueue(new Callback<IssueInfoTO>() {
+            @Override
+            public void onResponse(Call<IssueInfoTO> call, Response<IssueInfoTO> response) {
+                if (response.isSuccessful()) {
+                    if (mSuccessGetIssueListener != null) {
+                        mSuccessGetIssueListener.onSuccessGetIssue(response.body());
+                    }
+                } else {
+                    showToast(R.string.fail_getIssue_message);
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IssueInfoTO> call, Throwable t) {
                 logConnectionFailure(t.getMessage(), methodName);
             }
         });

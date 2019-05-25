@@ -8,17 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.UserInfo;
+import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
-public class PostListActivity extends AppCompatActivity {
+public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener {
 
     private int btnStatus = 0;
+    private Long issueId = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list);
+
+        RetrofitManager.getInstance().setOnSuccessGetIssueListener(this);
 
         final UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
         final Button registerBtn = findViewById(R.id.registerBtn_postList);
@@ -29,6 +35,8 @@ public class PostListActivity extends AppCompatActivity {
 
         final EditText issueEditText = findViewById(R.id.issueEditText_postList);
         final TextView issueTextView = findViewById(R.id.issueText_postList);
+        RetrofitManager.getInstance().getIssue();
+
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +60,30 @@ public class PostListActivity extends AppCompatActivity {
                         //TODO issue db
                         break;
                     default:
-                        Intent intentPostRegister = new Intent(PostListActivity.this, PostRegisterActivity.class);
-                        //TODO issue number
-                        intentPostRegister.putExtra("userInfo", userInfo);
-                        startActivity(intentPostRegister);
+                        if (issueId > 0L) {
+                            Intent intentPostRegister = new Intent(PostListActivity.this, PostRegisterActivity.class);
+                            //TODO issue number
+                            intentPostRegister.putExtra("userInfo", userInfo);
+                            startActivity(intentPostRegister);
+                        } else {
+                            Toast.makeText(GlobalApplication.getGlobalContext(), R.string.issueTitleText_postList, Toast.LENGTH_LONG).show();
+                        }
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        RetrofitManager.getInstance().removeSuccessGetIssueListener();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSuccessGetIssue(IssueInfoTO issueInfoTO) {
+        if (issueInfoTO != null && !issueInfoTO.getTitle().equals("")) {
+            ((TextView) findViewById(R.id.issueText_postList)).setText(issueInfoTO.getTitle());
+            issueId = issueInfoTO.getId();
+        }
     }
 }
