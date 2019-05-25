@@ -24,4 +24,7 @@
     <string name="feedback_column_name">대답</string>
     <string name="registerIssueBtn_post">안건 등록</string>
     <string name="registerPostBtn_post">글 쓰기</string>
+    <string name="pageText_postRegister">학생회의 의견보내기</string>
+    <string name="content_hint_postRegister">내용을 입력해 주세요</string>
+    <string name="submitBtnText_postRegister">보내기</string>
 </resources>
