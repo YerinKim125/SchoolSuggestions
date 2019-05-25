@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,8 +90,9 @@ public class RegisterActivity extends AppCompatActivity implements RetrofitManag
 
     @Override
     public void onSuccessRegister(UserInfo userInfo) {
-        //TODO
-        Log.i(getClass().toString(), String.valueOf(userInfo.getId()) + " " + userInfo.getStudentInfo());
+        Intent intentPostList = new Intent(RegisterActivity.this, PostListActivity.class);
+        intentPostList.putExtra("userInfo", userInfo);
+        startActivity(intentPostList);
     }
 
     @Override
