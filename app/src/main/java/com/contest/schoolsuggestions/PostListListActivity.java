@@ -6,16 +6,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.contest.schoolsuggestions.model.IssueInfoTO;
+import com.contest.schoolsuggestions.model.PostInfoTO;
+import com.contest.schoolsuggestions.model.PostListViewAdapter;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
-public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener {
+import java.util.List;
+
+public class PostListListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener, RetrofitManager.SuccessGetPostListListener {
 
     private int btnStatus = 0;
     private Long issueId = 0L;
@@ -26,6 +31,7 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
         setContentView(R.layout.activity_post_list);
 
         RetrofitManager.getInstance().setOnSuccessGetIssueListener(this);
+        RetrofitManager.getInstance().setOnSuccessGetPostListener(this);
 
         final UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
         final Button registerBtn = findViewById(R.id.registerBtn_postList);
@@ -62,7 +68,7 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
                         break;
                     default:
                         if (issueId > 0L) {
-                            Intent intentPostRegister = new Intent(PostListActivity.this, PostRegisterActivity.class);
+                            Intent intentPostRegister = new Intent(PostListListActivity.this, PostRegisterActivity.class);
                             //TODO issue number
                             intentPostRegister.putExtra("userInfo", userInfo);
                             startActivity(intentPostRegister);
@@ -77,6 +83,7 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
     @Override
     protected void onDestroy() {
         RetrofitManager.getInstance().removeSuccessGetIssueListener();
+        RetrofitManager.getInstance().removemSuccessGetPostListener();
         super.onDestroy();
     }
 
@@ -86,5 +93,11 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
             ((TextView) findViewById(R.id.issueText_postList)).setText(issueInfoTO.getTitle());
             issueId = issueInfoTO.getId();
         }
+    }
+
+    @Override
+    public void onSuccessGetPost(List<PostInfoTO> postInfoTOList) {
+        ListView postListView = findViewById(R.id.listView_post);
+        postListView.setAdapter(new PostListViewAdapter(postInfoTOList));
     }
 }

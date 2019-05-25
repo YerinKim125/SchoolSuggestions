@@ -16,7 +16,7 @@ public class PostRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO post db
-                Intent intentPostList = new Intent(PostRegisterActivity.this, PostListActivity.class);
+                Intent intentPostList = new Intent(PostRegisterActivity.this, PostListListActivity.class);
                 intentPostList.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intentPostList.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intentPostList);

@@ -7,10 +7,13 @@ import com.contest.schoolsuggestions.GlobalApplication;
 import com.contest.schoolsuggestions.R;
 import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.LoginTO;
+import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.google.gson.GsonBuilder;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +35,10 @@ public class RetrofitManager {
         void onSuccessGetIssue(IssueInfoTO issueInfoTO);
     }
 
+    public interface SuccessGetPostListListener {
+        void onSuccessGetPost(List<PostInfoTO> postInfoTOList);
+    }
+
     private static String TAG = "Retrofit";
     //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
     final private String requestURL = "http://10.0.2.2:8080";
@@ -41,6 +48,7 @@ public class RetrofitManager {
     private SuccessRegisterListener mSuccessRegisterListener;
     private SuccessLoginListener mSuccessLoginListener;
     private SuccessGetIssueListener mSuccessGetIssueListener;
+    private SuccessGetPostListListener mSuccessGetPostListListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -66,6 +74,10 @@ public class RetrofitManager {
         this.mSuccessGetIssueListener = mSuccessGetIssueListener;
     }
 
+    public void setOnSuccessGetPostListener(SuccessGetPostListListener mSuccessGetPostListListener) {
+        this.mSuccessGetPostListListener = mSuccessGetPostListListener;
+    }
+
     public void removeSuccessRegisterListener() {
         this.mSuccessRegisterListener = null;
     }
@@ -76,6 +88,10 @@ public class RetrofitManager {
 
     public void removeSuccessGetIssueListener() {
         this.mSuccessGetIssueListener = null;
+    }
+
+    public void removemSuccessGetPostListener() {
+        this.mSuccessGetPostListListener = null;
     }
 
     private void showToast(int message) {
@@ -181,6 +197,29 @@ public class RetrofitManager {
 
             @Override
             public void onFailure(Call<IssueInfoTO> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void getPostList(Long issueId) {
+        final String methodName = "getPostList";
+        Call<List<PostInfoTO>> req = service.getPostList(issueId);
+        req.enqueue(new Callback<List<PostInfoTO>>() {
+            @Override
+            public void onResponse(Call<List<PostInfoTO>> call, Response<List<PostInfoTO>> response) {
+                if (response.isSuccessful()) {
+                    if (mSuccessGetPostListListener != null) {
+                        mSuccessGetPostListListener.onSuccessGetPost(response.body());
+                    }
+                } else {
+                    showToast(R.string.fail_getPostList_message);
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PostInfoTO>> call, Throwable t) {
                 logConnectionFailure(t.getMessage(), methodName);
             }
         });
