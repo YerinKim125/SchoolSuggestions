@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.contest.schoolsuggestions.model.IssueInfo;
 import com.contest.schoolsuggestions.model.IssueInfoTO;
+import com.contest.schoolsuggestions.model.PostInfo;
 import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.PostListViewAdapter;
 import com.contest.schoolsuggestions.model.UserInfo;
@@ -105,6 +107,17 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
         ListView postListView = findViewById(R.id.listView_post);
         this.postInfoList = postInfoTOList;
         postListView.setAdapter(new PostListViewAdapter(postInfoTOList));
+        postListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intentPostView = new Intent(PostListActivity.this, PostViewActivity.class);
+                UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
+                intentPostView.putExtra("postInfo", new PostInfo(postInfoList.get(position)));
+                intentPostView.putExtra("userInfo", userInfo);
+                intentPostView.putExtra("issueInfo", issueInfo);
+                startActivity(intentPostView);
+            }
+        });
     }
 
     @Override

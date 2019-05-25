@@ -9,6 +9,7 @@ import com.contest.schoolsuggestions.model.IssueInfoTO;
 import com.contest.schoolsuggestions.model.LoginTO;
 import com.contest.schoolsuggestions.model.PostInfoTO;
 import com.contest.schoolsuggestions.model.RegisterUserTO;
+import com.contest.schoolsuggestions.model.UpdatePostTO;
 import com.contest.schoolsuggestions.model.UserInfo;
 import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.contest.schoolsuggestions.model.WritePostTO;
@@ -44,6 +45,10 @@ public class RetrofitManager {
         void onSuccessWritePost(PostInfoTO postInfoTO);
     }
 
+    public interface SuccessUpdatePostListener {
+        void onSuccessUpdatePost(PostInfoTO postInfoTO);
+    }
+
     private static String TAG = "Retrofit";
     //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
     final private String requestURL = "http://10.0.2.2:8080";
@@ -55,6 +60,7 @@ public class RetrofitManager {
     private SuccessGetIssueListener mSuccessGetIssueListener;
     private SuccessGetPostListListener mSuccessGetPostListListener;
     private SuccessWritePostListener mSuccessWritePostListener;
+    private SuccessUpdatePostListener mSuccessUpdatePostListener;
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -88,6 +94,10 @@ public class RetrofitManager {
         this.mSuccessWritePostListener = mSuccessWritePostListener;
     }
 
+    public void setOnSuccessUpdatePostListener(SuccessUpdatePostListener mSuccessUpdatePostListener) {
+        this.mSuccessUpdatePostListener = mSuccessUpdatePostListener;
+    }
+
     public void removeSuccessRegisterListener() {
         this.mSuccessRegisterListener = null;
     }
@@ -106,6 +116,10 @@ public class RetrofitManager {
 
     public void removeSuccessWritePostListener() {
         this.mSuccessWritePostListener = null;
+    }
+
+    public void removeSuccessUpdatePostListener() {
+        this.mSuccessUpdatePostListener = null;
     }
 
     private void showToast(int message) {
@@ -252,6 +266,28 @@ public class RetrofitManager {
                     }
                 } else {
                     showToast(R.string.fail_writePost_message);
+                    logBadResponse(response.code(), response.errorBody().toString(), methodName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostInfoTO> call, Throwable t) {
+                logConnectionFailure(t.getMessage(), methodName);
+            }
+        });
+    }
+
+    public void updatePost(Long issueId, Long postId, UpdatePostTO updatePostTO) {
+        final String methodName = "updatePost";
+        Call<PostInfoTO> req = service.updatePost(issueId, postId, updatePostTO);
+        req.enqueue(new Callback<PostInfoTO>() {
+            @Override
+            public void onResponse(Call<PostInfoTO> call, Response<PostInfoTO> response) {
+                if (response.isSuccessful()) {
+                    if (mSuccessUpdatePostListener != null) {
+                        mSuccessUpdatePostListener.onSuccessUpdatePost(response.body());
+                    }
+                } else {
                     logBadResponse(response.code(), response.errorBody().toString(), methodName);
                 }
             }
