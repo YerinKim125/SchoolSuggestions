@@ -19,4 +19,19 @@
     <string name="code_incorrect_message">코드 인증에 실패하였습니다.</string>
     <string name="success_login_message">로그인에 성공하였습니다.</string>
     <string name="fail_login_message">로그인에 실패하였습니다. 아이디 혹은 비밀번호를 확인해주세요.</string>
+    <string name="title_column_name">제목</string>
+    <string name="agreement_column_name">찬성:반대</string>
+    <string name="feedback_column_name">대답</string>
+    <string name="registerIssueBtn_post">안건 등록</string>
+    <string name="registerPostBtn_post">글 쓰기</string>
+    <string name="pageText_postRegister">학생회의 의견보내기</string>
+    <string name="content_hint_postRegister">내용을 입력해 주세요</string>
+    <string name="submitBtnText_postRegister">보내기</string>
+    <string name="issueTitleText_postList">안건을 작성해 주세요</string>
+    <string name="fail_getIssue_message">안건 가져오기에 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="success_writeIssue_message">안건 등록에 성공했습니다.</string>
+    <string name="fail_writeIssue_message">안건 등록에 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="fail_getPostList_message">의견 가져오기에 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="success_writePost_message">의견 등록에 성공했습니다.</string>
+    <string name="fail_writePost_message">의견 등록에 실패했습니다. 다시 시도해 주세요.</string>
 </resources>

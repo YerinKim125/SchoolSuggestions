@@ -1,6 +1,8 @@
 package com.contest.schoolsuggestions.model;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable {
 
     private Long id;
     private String name;
