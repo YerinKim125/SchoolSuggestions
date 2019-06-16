@@ -50,8 +50,8 @@ public class RetrofitManager {
     }
 
     private static String TAG = "Retrofit";
-    //    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
-    final private String requestURL = "http://10.0.2.2:8080";
+    final private String requestURL = "http://ec2-54-180-93-44.ap-northeast-2.compute.amazonaws.com:8080";
+    //final private String requestURL = "http://10.0.2.2:8080";
     private static RetrofitManager retrofitManager;
     private Retrofit retrofit;
     private RetrofitService service;
