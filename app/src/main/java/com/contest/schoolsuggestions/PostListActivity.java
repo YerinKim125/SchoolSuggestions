@@ -23,7 +23,7 @@ import com.contest.schoolsuggestions.retrofit.RetrofitManager;
 
 import java.util.List;
 
-public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener, RetrofitManager.SuccessGetPostListListener, RetrofitManager.SuccessWritePostListener {
+public class PostListActivity extends AppCompatActivity implements RetrofitManager.SuccessGetIssueListener, RetrofitManager.SuccessGetPostListListener, RetrofitManager.SuccessWritePostListener, RetrofitManager.SuccessUpdatePostListener {
 
     private List<PostInfoTO> postInfoList;
     private int btnStatus = 0;
@@ -37,6 +37,7 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
         RetrofitManager.getInstance().setOnSuccessGetIssueListener(this);
         RetrofitManager.getInstance().setOnSuccessGetPostListener(this);
         RetrofitManager.getInstance().setOnSuccessWritePostListener(this);
+        RetrofitManager.getInstance().setOnSuccessUpdatePostListener(this);
 
         final UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
         final Button registerBtn = findViewById(R.id.registerBtn_postList);
@@ -128,5 +129,21 @@ public class PostListActivity extends AppCompatActivity implements RetrofitManag
         ListView postListView = findViewById(R.id.listView_post);
         PostListViewAdapter adapter = (PostListViewAdapter) postListView.getAdapter();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSuccessUpdatePost(PostInfoTO postInfoTO) {
+        for (PostInfoTO post : postInfoList) {
+            if (post.getId().equals(postInfoTO.getId())) {
+                post.setAgree(postInfoTO.getAgree());
+                post.setDisagree(postInfoTO.getDisagree());
+                post.setFeedback(postInfoTO.getFeedback());
+
+                ListView postListView = findViewById(R.id.listView_post);
+                PostListViewAdapter adapter = (PostListViewAdapter) postListView.getAdapter();
+                adapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.contest.schoolsuggestions.model.WriteIssueTO;
 import com.contest.schoolsuggestions.model.WritePostTO;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,7 +61,7 @@ public class RetrofitManager {
     private SuccessGetIssueListener mSuccessGetIssueListener;
     private SuccessGetPostListListener mSuccessGetPostListListener;
     private SuccessWritePostListener mSuccessWritePostListener;
-    private SuccessUpdatePostListener mSuccessUpdatePostListener;
+    private List<SuccessUpdatePostListener> mSuccessUpdatePostListeners = new ArrayList<>();
 
     private RetrofitManager() {
         retrofit = new Retrofit.Builder().baseUrl(requestURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create())).build();
@@ -95,7 +96,7 @@ public class RetrofitManager {
     }
 
     public void setOnSuccessUpdatePostListener(SuccessUpdatePostListener mSuccessUpdatePostListener) {
-        this.mSuccessUpdatePostListener = mSuccessUpdatePostListener;
+        this.mSuccessUpdatePostListeners.add(mSuccessUpdatePostListener);
     }
 
     public void removeSuccessRegisterListener() {
@@ -118,8 +119,8 @@ public class RetrofitManager {
         this.mSuccessWritePostListener = null;
     }
 
-    public void removeSuccessUpdatePostListener() {
-        this.mSuccessUpdatePostListener = null;
+    public void removeSuccessUpdatePostListener(SuccessUpdatePostListener mSuccessUpdatePostListener) {
+        this.mSuccessUpdatePostListeners.remove(mSuccessUpdatePostListener);
     }
 
     private void showToast(int message) {
@@ -284,8 +285,10 @@ public class RetrofitManager {
             @Override
             public void onResponse(Call<PostInfoTO> call, Response<PostInfoTO> response) {
                 if (response.isSuccessful()) {
-                    if (mSuccessUpdatePostListener != null) {
-                        mSuccessUpdatePostListener.onSuccessUpdatePost(response.body());
+                    if (mSuccessUpdatePostListeners != null && mSuccessUpdatePostListeners.size() > 0) {
+                        for (SuccessUpdatePostListener mSuccessUpdatePostListener : mSuccessUpdatePostListeners) {
+                            mSuccessUpdatePostListener.onSuccessUpdatePost(response.body());
+                        }
                     }
                 } else {
                     logBadResponse(response.code(), response.errorBody().toString(), methodName);

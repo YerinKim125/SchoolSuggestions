@@ -101,7 +101,7 @@ public class PostViewActivity extends AppCompatActivity implements RetrofitManag
 
     @Override
     protected void onDestroy() {
-        RetrofitManager.getInstance().removeSuccessUpdatePostListener();
+        RetrofitManager.getInstance().removeSuccessUpdatePostListener(this);
         super.onDestroy();
     }
 }
