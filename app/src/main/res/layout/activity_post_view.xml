@@ -1,104 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".PostRegisterActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PostRegisterActivity">
 
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-                android:id="@+id/issueText_postView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/issueTitleText_postList"
-                android:textSize="20sp"/>
-    </RelativeLayout>
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/issueText_postView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/issueTitleText_postList"
+                    android:textSize="20sp" />
+            </RelativeLayout>
 
 
-    <TextView
-            android:id="@+id/titleText_postView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/title_column_name"
-            android:padding="10dp"
-            android:textColorHint="@color/colorPrimary"
-            android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/titleText_postView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/title_column_name"
+                android:padding="10dp"
+                android:textColorHint="@color/colorPrimary"
+                android:textSize="20sp" />
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
 
-        <TextView
-                android:id="@+id/agreeTextView_postView"
+                <TextView
+                    android:id="@+id/agreeTextView_postView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="찬성 : 0"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/disagreeTextView_postView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="반대 : 0"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contentText_postView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_border"
+                android:gravity="top"
+                android:hint="@string/content_hint_postRegister"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColorHint="@color/colorBlack"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/feedBackText_postView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_border"
+                android:gravity="top"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:text="@string/feedback_hint_postView"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/feedBackEditText_postView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_border"
+                android:gravity="top"
+                android:hint="@string/feedback_hint_postView"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColorHint="@color/colorBlack"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/submitBtn_postView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="찬성 : 0"
-                android:textSize="20sp"/>
-
-        <TextView
-                android:id="@+id/disagreeTextView_postView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="반대 : 0"
-                android:textSize="20sp"/>
-    </LinearLayout>
-
-    <TextView
-            android:id="@+id/contentText_postView"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_border"
-            android:gravity="top"
-            android:hint="@string/content_hint_postRegister"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:textColorHint="@color/colorBlack"
-            android:textSize="15sp"/>
-
-    <TextView
-            android:id="@+id/feedBackText_postView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_border"
-            android:gravity="top"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@string/feedback_hint_postView"
-            android:textColor="@color/colorBlack"
-            android:textSize="15sp"/>
-
-    <EditText
-            android:id="@+id/feedBackEditText_postView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_border"
-            android:gravity="top"
-            android:hint="@string/feedback_hint_postView"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:textColorHint="@color/colorBlack"
-            android:textSize="15sp"
-            android:visibility="gone"/>
-
-    <Button
-            android:id="@+id/submitBtn_postView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:backgroundTint="@color/colorLightGray"
-            android:text="@string/submitBtnText_postRegister"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:visibility="gone"/>
+                android:layout_gravity="end"
+                android:backgroundTint="@color/colorLightGray"
+                android:text="@string/submitBtnText_postRegister"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

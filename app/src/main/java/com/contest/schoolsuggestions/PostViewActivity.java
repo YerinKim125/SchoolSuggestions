@@ -38,7 +38,7 @@ public class PostViewActivity extends AppCompatActivity implements RetrofitManag
         EditText feedbackEditText = findViewById(R.id.feedBackEditText_postView);
 
         issueTextView.setText(issueInfo.getTitle());
-        titleTextView.setText(postInfo.getContent());
+        titleTextView.setText(postInfo.getTitle());
         contentTextView.setText(postInfo.getContent());
         agreeTextView.setText(getString(R.string.agree_text_postView) + " : " + String.valueOf(postInfo.getAgree()));
         disagreeTextView.setText(getString(R.string.disagree_text_postView) + " : " + String.valueOf(postInfo.getDisagree()));
